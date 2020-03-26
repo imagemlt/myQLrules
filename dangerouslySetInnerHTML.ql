@@ -1,9 +1,5 @@
 import javascript
 
-/**
- * Gets a warning message for `pref` if one of the `nodeIntegration` features is enabled.
- */
-
 class ReactDangerousSetInnerHTMLSinks extends DataFlow::Node {
    ReactDangerousSetInnerHTMLSinks() {
     exists(JSXAttribute attr |
@@ -21,7 +17,8 @@ class ReactSetInnerHtmlTracker extends TaintTracking::Configuration{
     override predicate isSource(DataFlow::Node nd){
        exists(|
        not (nd.asExpr() instanceof ConstantExpr)
-       and nd.toString().toLowerCase().indexOf("icon") = -1)
+       and not exists(nd.toString().toLowerCase().indexOf("icon"))
+       )
     }
 
     override predicate isSink(DataFlow::Node nd){
@@ -44,8 +41,3 @@ from ReactSetInnerHtmlTracker pt, DataFlow::Node source, DataFlow::Node sink
 where pt.hasFlow(source, sink)
 select source,sink
 
-/*
-from ObjectExpr ob, Property value
-where value = ob.getPropertyByName("nodeIntegration")
-select ob,value
-*/
