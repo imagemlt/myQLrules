@@ -27,8 +27,7 @@ class ReactSetHrefTracker extends TaintTracking::Configuration{
     }
 
     override predicate isSink(DataFlow::Node nd){
-        exists(ReactSetHrefSinks rd|
-            nd = rd)
+      nd instanceof ReactSetHrefSinks
     }
 
     /*override predicate isAdditionalTaintStep(DataFlow::Node pred, DataFlow::Node succ) {

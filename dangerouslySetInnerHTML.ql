@@ -1,5 +1,6 @@
 import javascript
 
+
 class ReactDangerousSetInnerHTMLSinks extends DataFlow::Node {
    ReactDangerousSetInnerHTMLSinks() {
     exists(JSXAttribute attr |
@@ -15,15 +16,12 @@ class ReactSetInnerHtmlTracker extends TaintTracking::Configuration{
     }
 
     override predicate isSource(DataFlow::Node nd){
-       exists(|
        not (nd.asExpr() instanceof ConstantExpr)
        and not exists(nd.toString().toLowerCase().indexOf("icon"))
-       )
     }
 
     override predicate isSink(DataFlow::Node nd){
-        exists(ReactDangerousSetInnerHTMLSinks rd|
-            nd = rd)
+        nd instanceof ReactDangerousSetInnerHTMLSinks
     }
 
     override predicate isAdditionalTaintStep(DataFlow::Node pred, DataFlow::Node succ) {

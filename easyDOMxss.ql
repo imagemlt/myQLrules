@@ -1,9 +1,5 @@
 import javascript
 
-/**
- * Gets a warning message for `pref` if one of the `nodeIntegration` features is enabled.
- */
-
 class DocumentWriteSinks extends DataFlow::Node {
    DocumentWriteSinks() {
     exists(CallExpr call|
@@ -45,14 +41,12 @@ class DocumentWriteTracker extends TaintTracking::Configuration{
     }
 
     override predicate isSource(DataFlow::Node nd){
-       exists(|
-       nd instanceof LocationHashSource)
+       nd instanceof LocationHashSource
     }
 
     override predicate isSink(DataFlow::Node nd){
-        exists(|
-            nd instanceof DocumentWriteSinks
-            or nd instanceof InnerHTMLSinks)
+        nd instanceof DocumentWriteSinks
+        or nd instanceof InnerHTMLSinks
     }
 
     override predicate isAdditionalTaintStep(DataFlow::Node pred, DataFlow::Node succ) {
@@ -67,16 +61,6 @@ class DocumentWriteTracker extends TaintTracking::Configuration{
     }
 }
 
-//from LocationHashSource s,CallExpr call
-//where s.asExpr() = call
-//select s,call.getReceiver().toString()
 from DocumentWriteTracker pt, DataFlow::Node source, DataFlow::Node sink
 where pt.hasFlow(source, sink) 
 select source,sink
-
-
-/*
-from ObjectExpr ob, Property value
-where value = ob.getPropertyByName("nodeIntegration")
-select ob,value
-*/
